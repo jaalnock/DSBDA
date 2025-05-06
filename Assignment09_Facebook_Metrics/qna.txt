@@ -1,0 +1,41 @@
+Q. What is melting in pandas?
+Ans. Melting is a data transformation technique in pandas that converts wide-format data into long-format. It unpivots the DataFrame from columns into rows, making it easier to analyze or visualize grouped data.
+
+Q. What is transposing in pandas?
+Ans. Transposing flips the DataFrame by converting rows into columns and columns into rows. It is done using df.transpose() or df.T, and is useful when we want to reorient the data for better readability or analysis.
+
+Q. What is the purpose of sorting a DataFrame?
+Ans. Sorting arranges the data in a specified order based on one or more columns, typically in ascending or descending order. It helps in identifying top values, trends, or outliers.
+
+Q. How do you create subsets of data in pandas?
+Ans. Subsets are created using filtering or conditions. For example, df[df['Type'] == 'Photo'] filters all rows where the Type column is 'Photo'.
+
+Q. What is merging in pandas? How is it different from joining?
+Ans. Merging in pandas combines multiple DataFrames. pd.concat() merges vertically or horizontally, while pd.merge() is used for SQL-like joins based on key columns.
+
+Q. What is the use of pd.concat()?
+Ans. pd.concat() is used to combine two or more DataFrames either vertically (row-wise) or horizontally (column-wise).
+
+Q. What is the difference between melt() and pivot_table()?
+Ans. melt() transforms data from wide to long format, while pivot_table() transforms it from long back to wide, often with aggregation functions.
+
+Q. Why do we use reset_index() after pivoting or grouping?
+Ans. reset_index() converts the index back to columns, making the DataFrame easier to work with and preventing index-based errors in further operations.
+
+Q. What is the significance of id_vars and value_vars in melt()?
+Ans. id_vars are columns to keep fixed, while value_vars are columns that get unpivoted into rows.
+
+Q. What is a pivot table in pandas?
+Ans. A pivot table reorganizes data by summarizing it using an index, columns, and aggregation functions. It's useful for grouped analysis.
+
+Q. Why is transposing used rarely in large datasets?
+Ans. Because transposing large datasets can be memory-intensive and may not be meaningful unless column names are consistent and analyzable as rows.
+
+Q. What is the advantage of melting data before plotting?
+Ans. Melting converts the data into long format, which is required by many plotting libraries (like seaborn) to visualize categories on axes.
+
+Q. Can you sort a DataFrame by multiple columns?
+Ans. Yes, by passing a list of columns to sort_values(), e.g., df.sort_values(by=['Type', 'like']).
+
+Q. What is the use of pivot_table() with aggfunc='sum'?
+Ans. It aggregates the data by summing values grouped by the specified index and column combinations.

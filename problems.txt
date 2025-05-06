@@ -1,0 +1,9 @@
+Category                       | Problem Numbers           | Count
+------------------------------ | ------------------------- | -----
+MapReduce & Hadoop             | 1, 2, 3, 4, 5             | 5
+HBase & HiveQL Applications    | 6, 7, 8                   | 3
+Python Data Manipulation       | 9, 10, 11, 12, 24, 25     | 6
+Python ML Modeling             | 13, 14, 15, 16, 26        | 5
+Python Data Visualization      | 17, 18, 21, 22            | 4
+Tableau Data Visualization     | 19, 20, 23                | 3
+Web Scraping Projects          | 27, 28, 29, 30            | 4
