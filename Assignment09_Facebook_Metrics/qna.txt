@@ -39,3 +39,6 @@ Ans. Yes, by passing a list of columns to sort_values(), e.g., df.sort_values(by
 
 Q. What is the use of pivot_table() with aggfunc='sum'?
 Ans. It aggregates the data by summing values grouped by the specified index and column combinations.
+
+Q: What does df['Type'].unique() do?
+Ans: It returns an array of all unique values present in the 'Type' column of the DataFrame df, removing any duplicates.
