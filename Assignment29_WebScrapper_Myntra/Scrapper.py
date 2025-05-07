@@ -1,14 +1,14 @@
 from bs4 import BeautifulSoup
 
 # Load HTML
-with open("Myntra.html", "r", encoding="utf-8") as file:
+with open("Ajio.html", "r", encoding="utf-8") as file:
     soup = BeautifulSoup(file, "lxml")
 
 # Extract reviews
 reviews = soup.find_all("div", class_="user-review-userReviewWrapper")
 
 # Write to file
-with open("reviews.txt", "w", encoding="utf-8") as f:
+with open("ajio_reviews.txt", "w", encoding="utf-8") as f:
     for review in reviews:
         name = review.select_one(".user-review-left span")
         rating = review.select_one(".user-review-starRating")
@@ -19,4 +19,4 @@ with open("reviews.txt", "w", encoding="utf-8") as f:
         f.write(f"Comment: {comment.get_text(strip=True) if comment else 'N/A'}\n")
         f.write("-" * 40 + "\n")
 
-print("✅ Saved to reviews.txt")
+print("Saved to myntra_reviews.txt")
