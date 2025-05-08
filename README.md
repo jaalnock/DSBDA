@@ -7,4 +7,6 @@
 
 ---
 
+**✨ Be a legend. Drop a star. It's free real estate.**
+
 *✅ All the best!*
