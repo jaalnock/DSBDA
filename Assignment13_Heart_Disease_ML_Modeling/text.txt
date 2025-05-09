@@ -1,0 +1,75 @@
+# Load and Clean the Data
+import pandas as pd
+import numpy as np
+
+# Load dataset
+df = pd.read_csv('../datasets/HeartDisease/heart.csv')
+
+# Replace "?" with NaN and convert data to numeric where needed
+df.replace('?', np.nan, inplace=True)
+
+# Drop rows with any NaN values
+df.dropna(inplace=True)
+
+# Remove rows with negative values
+df = df[(df.select_dtypes(include=[np.number]) >= 0).all(axis=1)]
+
+df.shape
+
+
+# Detect and Remove Outliers (Z-Score Method)
+from scipy.stats import zscore
+
+# Compute Z-scores
+z_scores = np.abs(zscore(df.select_dtypes(include=[np.number])))
+df_no_outliers = df[(z_scores < 3).all(axis=1)]
+
+print("Shape after Outlier Removal:", df_no_outliers.shape)
+
+
+# Data Transformation (Normalization)
+from sklearn.preprocessing import StandardScaler
+
+# Separate features and target
+X = df_no_outliers.drop('target', axis=1)
+y = df_no_outliers['target']
+
+# Normalize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+
+# Train-Test Split
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42)
+
+
+# Model 1: Logistic Regression
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Logistic Regression
+logreg = LogisticRegression()
+logreg.fit(X_train, y_train)
+y_pred_log = logreg.predict(X_test)
+
+acc_log = accuracy_score(y_test, y_pred_log)
+print("Logistic Regression Accuracy:", acc_log)
+
+
+# Model 2: k-Nearest Neighbors (kNN)
+from sklearn.neighbors import KNeighborsClassifier
+
+# kNN model
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+y_pred_knn = knn.predict(X_test)
+
+acc_knn = accuracy_score(y_test, y_pred_knn)
+print("kNN Accuracy:", acc_knn)
+
+
+# Accuracy Comparison
+print(f"Accuracy Comparison:\n  Logistic Regression: {acc_log:.2f}\n  kNN: {acc_knn:.2f}")

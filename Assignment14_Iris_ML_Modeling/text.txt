@@ -1,0 +1,82 @@
+# Import Libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+from scipy.stats import zscore
+
+
+# Load the dataset
+df = pd.read_csv("../datasets/Iris/iris.csv")
+
+# Show the first few rows
+print(df.head())
+df.shape
+
+# Data Cleaning: Remove missing values and check for negatives
+# Replace "?" with NaN and convert data to numeric where needed
+df.replace('?', np.nan, inplace=True)
+
+# Drop rows with any NaN values
+df.dropna(inplace=True)
+
+# Remove rows with negative values
+df = df[(df.select_dtypes(include=[np.number]) >= 0).all(axis=1)]
+
+df.shape
+
+
+# Outlier Detection and Removal (Z-score)
+# Calculate Z-scores
+z_scores = np.abs(zscore(df.select_dtypes(include=[np.number])))
+
+# Keep only rows where all z-scores < 3
+df = df[(z_scores < 3).all(axis=1)]
+print("Data shape after outlier removal:", df.shape)
+
+# Encoding and Splitting
+# Encode the 'variety' column
+le = LabelEncoder()
+df['variety'] = le.fit_transform(df['variety'])
+
+# Separate features and target
+X = df.drop('variety', axis=1)
+y = df['variety']
+
+# Scale features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Split into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+
+# Logistic Regression Model
+# Train Logistic Regression
+lr_model = LogisticRegression(max_iter=200)
+lr_model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred_lr = lr_model.predict(X_test)
+
+acc_log = accuracy_score(y_test, y_pred_lr)
+print("Logistic Regression Accuracy:", acc_log)
+
+
+#  Naïve Bayes Model
+# Train Naïve Bayes
+nb_model = GaussianNB()
+nb_model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred_nb = nb_model.predict(X_test)
+
+acc_nb = accuracy_score(y_test, y_pred_nb)
+print("Naïve Bayes Accuracy:", acc_nb)
+
+
+# Print comparison
+print(f"Accuracy Comparison:\n  Logistic Regression: {acc_log:.2f}\n  Naïve Bayes: {acc_nb:.2f}")

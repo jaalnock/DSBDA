@@ -1,0 +1,68 @@
+# Load the dataset
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('../datasets/BreastCancer/breast-cancer.csv')
+
+# Data Cleaning: Remove missing values and check for negatives
+# Replace "?" with NaN and convert data to numeric where needed
+df.replace('?', np.nan, inplace=True)
+
+# Drop rows with any NaN values
+df.dropna(inplace=True)
+
+# Remove rows with negative values
+df = df[(df.select_dtypes(include=[np.number]) >= 0).all(axis=1)]
+
+df.shape
+
+
+# Error Correction: Remove outliers using Z-score
+from scipy.stats import zscore
+
+z_scores = np.abs(zscore(df.select_dtypes(include=[np.number])))
+df = df[(z_scores < 3).all(axis=1)]
+
+
+# Data Transformation: Encode target and normalize features
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+df = df.drop(columns=['id'])
+le = LabelEncoder()
+df['diagnosis'] = le.fit_transform(df['diagnosis'])  # M=1, B=0
+
+X = df.drop('diagnosis', axis=1)
+y = df['diagnosis']
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+
+# Split the data for training and testing
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+
+# Train Logistic Regression model
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+lr = LogisticRegression()
+lr.fit(X_train, y_train)
+y_pred_lr = lr.predict(X_test)
+acc_lr = accuracy_score(y_test, y_pred_lr)
+print("Logistic Regression Accuracy:", acc_lr)
+
+
+# Train Naive Bayes model
+from sklearn.naive_bayes import GaussianNB
+
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+y_pred_nb = nb.predict(X_test)
+acc_nb = accuracy_score(y_test, y_pred_nb)
+print("Naïve Bayes Accuracy:", acc_nb)
+
+# Accuracy Comparison
+print(f"Accuracy Comparison:\n  Logistic Regression: {acc_lr:.2f}\n  Naive Bayes: {acc_nb:.2f}")
