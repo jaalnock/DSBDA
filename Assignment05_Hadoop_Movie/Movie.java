@@ -46,8 +46,8 @@ public class Movie {
 
         @Override
         protected void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
-            float total = 0;
-            int count = 0;
+            float total = 0; //totalRating
+            int count = 0;  //totalCountOfReviews
 
             for (FloatWritable val : values) {
                 total += val.get();
